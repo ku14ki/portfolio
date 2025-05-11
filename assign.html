@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="photo/logo-transparent_title.png">
+  <title>KB's Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+  <div class="page-wrapper">
+  <header>
+    <div class="logo"><a href="index.html"><img src="photo/logo-transparent.png" height="60"></a></div>
+
+  <!-- Hamburger icon -->
+  <div class="hamburger" onclick="toggleMenu()">
+    ☰
+  </div>
+
+  <nav id="nav-links">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#projects">Projects</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <script>
+  function toggleMenu() {
+    const nav = document.getElementById("nav-links");
+    nav.classList.toggle("show");
+  }
+</script>
+
+</header>
+
+<!-- Card Gallery -->
+ <div class="card-gallery-container">
+<div class="card-gallery">
+<!-- GET Method Card Section -->
+<section id="greeting-form" class="container my-5">
+  <div class="card custom-card mx-auto" style="max-width: 400px;">
+    <div class="card-body text-center" style="background-color:#0D0B21;">
+      <h5 class="card-title" style="color:#cfcfcf;">Say Hello!</h5>
+      <form method="GET">
+        <div class="mb-3">
+          <input type="text" name="name" class="form-control" placeholder="Enter your name" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="background-color: #7f3cf0;">Submit</button>
+      </form>
+      <div id="result" class="mt-3"></div>
+    </div>
+  </div>
+
+ <script>
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get('name');
+  const resultDiv = document.getElementById('result');
+
+  if (name) {
+    resultDiv.innerHTML = `<h6 style="color:#cfcfcf;">Hello, <strong style="color:#cfcfcf;">${name}</strong>!</h6>`;
+    
+  }
+</script>
+
+</section>
+
+ <!-- POST Method Card Section -->
+<section id="greeting-post" class="container my-5">
+  <div class="card custom-card mx-auto" style="max-width: 400px;">
+    <div class="card-body text-center" style="background-color:#0D0B21;">
+      <h5 class="card-title" style="color:#cfcfcf;">Say Hello (POST)</h5>
+      <form id="postForm" method="POST">
+        <div class="mb-3">
+          <input type="text" name="name" id="postName" class="form-control" placeholder="Enter your name" required>
+        </div>
+        <button type="submit" class="btn btn-success" style="background-color: #7f3cf0;">Submit</button>
+      </form>
+      <div id="postResult" class="mt-3" style="padding: 10px; background-color: #0D0B21;"></div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('postForm');
+    const resultBox = document.getElementById('postResult');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault(); // Prevent actual page reload
+      const name = document.getElementById('postName').value.trim();
+
+      if (name) {
+        resultBox.innerHTML = `<h6 style="color:#cfcfcf;">Hello, <strong>${name}</strong>!</h6>`;
+        form.reset(); // Clear the form
+      } else {
+        resultBox.innerHTML = 'Please enter your name.';
+      }
+    });
+  </script>
+</section>
+
+<!-- PUT Method -->
+<section id="greeting-put" class="container my-5">
+  <div class="card custom-card mx-auto" style="max-width: 400px;">
+    <div class="card-body text-center" style="background-color:#0D0B21;">
+      <h5 class="card-title" style="color:#cfcfcf;">Update Your Name (PUT)</h5>
+      <form id="putForm">
+        <div class="mb-3">
+          <input type="text" name="putName" id="putName" class="form-control" placeholder="Enter new name" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="background-color: #7f3cf0;">Update</button>
+      </form>
+      <div id="putResult" class="mt-3"></div>
+    </div>
+  </div>
+
+  <script>
+    const putForm = document.getElementById('putForm');
+    const putResult = document.getElementById('putResult');
+
+    putForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('putName').value.trim();
+
+      if (name) {
+        // Simulate PUT request using JSONPlaceholder API
+        fetch('https://jsonplaceholder.typicode.com/posts/1', {
+          method: 'PUT',
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8'
+          },
+          body: JSON.stringify({ name: name })
+        })
+        .then(response => response.json())
+        .then(data => {
+          // Explicitly confirm the update with the user
+          putResult.innerHTML = `
+            <h6 style="color:#cfcfcf;">
+              Name has been <strong style="color:#7f3cf0;">successfully updated</strong> to <strong style="color:#cfcfcf;">${data.name}</strong>!
+            </h6>
+          `;
+          putForm.reset(); // Clear the form
+        })
+        .catch(error => {
+          putResult.innerHTML = `<p style="color: red;">Error updating name.</p>`;
+        });
+      }
+    });
+  </script>
+</section>
+
+<!-- DELETE Method -->
+<section id="greeting-delete" class="container my-5">
+  <div class="card custom-card mx-auto" style="max-width: 400px;">
+    <div class="card-body text-center" style="background-color:#0D0B21;">
+      <h5 class="card-title" style="color:#cfcfcf;">Delete Your Name (DELETE)</h5>
+      <form id="deleteForm">
+        <div class="mb-3">
+          <input type="text" name="deleteName" id="deleteName" class="form-control" placeholder="Enter name to delete" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="background-color: #7f3cf0;">Delete</button>
+      </form>
+      <div id="deleteResult" class="mt-3"></div>
+    </div>
+  </div>
+
+  <script>
+    const deleteForm = document.getElementById('deleteForm');
+    const deleteResult = document.getElementById('deleteResult');
+
+    deleteForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('deleteName').value.trim();
+
+      if (name) {
+        // Simulate DELETE request using JSONPlaceholder API
+        fetch('https://jsonplaceholder.typicode.com/posts/1', {
+          method: 'DELETE',
+        })
+        .then(response => response.json())
+        .then(data => {
+          // Show confirmation of the delete
+          deleteResult.innerHTML = `
+            <h6 style="color:#cfcfcf;">
+              The name <strong style="color:#cfcfcf;">${name}</strong> has been <strong style="color:#e53935;">successfully deleted</strong>.
+            </h6>
+          `;
+          deleteForm.reset(); // Clear the form
+        })
+        .catch(error => {
+          deleteResult.innerHTML = `<p style="color: red;">Error deleting the name.</p>`;
+        });
+      }
+    });
+  </script>
+</section>
+
+<!-- Patch Method -->
+ <section id="greeting-patch" class="container my-5">
+  <div class="card custom-card mx-auto" style="max-width: 400px;">
+    <div class="card-body text-center" style="background-color:#0D0B21;">
+      <h5 class="card-title" style="color:#cfcfcf;">Update Name (PATCH)</h5>
+      <form id="patchForm">
+        <div class="mb-3">
+          <input type="text" name="patchName" id="patchName" class="form-control" placeholder="Enter name to update" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="background-color: #7f3cf0;">Patch</button>
+      </form>
+      <div id="patchResult" class="mt-3"></div>
+    </div>
+  </div>
+
+  <script>
+    const patchForm = document.getElementById('patchForm');
+    const patchResult = document.getElementById('patchResult');
+
+    patchForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('patchName').value.trim();
+
+      if (name) {
+        // Simulate PATCH request using JSONPlaceholder API
+        fetch('https://jsonplaceholder.typicode.com/posts/1', {
+          method: 'PATCH',
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8'
+          },
+          body: JSON.stringify({ name: name })
+        })
+        .then(response => response.json())
+        .then(data => {
+          patchResult.innerHTML = `
+            <h6 style="color:#cfcfcf;">
+              Name has been <strong style="color:#7f3cf0;">patched</strong> to <strong style="color:#cfcfcf;">${data.name}</strong>.
+            </h6>
+          `;
+          patchForm.reset(); // Clear the form
+        })
+        .catch(error => {
+          patchResult.innerHTML = `<p style="color: red;">Error patching the name.</p>`;
+        });
+      }
+    });
+  </script>
+</section>
+</div>
+</div>
+
+<!-- Footer Section -->
+<footer class="site-footer">
+  <div class="container">
+    <p class="mb-1">&copy; 2025 KB.</p>
+    <p class="mb-0">
+      Designed & Built by <strong>Kabyashree Buragohain</strong>.
+    </p>
+  </div>  
+</footer>
+</div>
